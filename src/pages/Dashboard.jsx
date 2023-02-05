@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import SearchBar from "../components/SearchBar";
 import { streamOrders, getFirebase } from "../utils/firebaseConfig";
-import { query, orderBy, startAt } from "firebase/firestore";
+import { query, orderBy, startAt, onSnapshot, collection, where, limit } from "firebase/firestore";
 import MoneyOffIcon from "@mui/icons-material/MoneyOff";
 import { useMenu } from "../context/MenuContext";
 import Accordion from "@mui/material/Accordion";
@@ -27,6 +27,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CollapsibleTable from "../components/OrderTable";
 import OrderCard from "../components/OrderCard";
+import { useAuth } from "../context/AuthContext";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -72,11 +73,34 @@ const Dashboard = () => {
     return () => unsub();
   }, [searchValue]);
 
+  const { user } = useAuth()
   useEffect(() => {
-    const { stream } = streamOrders();
-    const unsub = stream((orders) => {
-      setOrders(orders);
+
+    const ORDERS_COLLECTION_ID = "orders";
+    const { firestore, auth } = getFirebase();
+
+    const orderCol = collection(firestore, ORDERS_COLLECTION_ID);
+    console.log(user)
+
+    const q = query(
+      orderCol,
+      where("stall_order.stall" + user.role[user.role.length - 1] + ".status", "==", "inprogress"),
+      orderBy("order_placed_timestamp", "asc"),
+      limit(15)
+    );
+
+    const unsub = onSnapshot(q, (snapshot) => {
+      const ordersreceived = snapshot.docs.map((doc) => {
+        return {
+          id: doc.id,
+          ...doc.data(),
+        };
+      });
+
+      setOrders(ordersreceived);
     });
+
+
 
     return () => unsub();
   }, []);

@@ -20,7 +20,6 @@ function AuthProvider({ children }) {
 
   const navigate = useNavigate();
   const location = useLocation();
-
   function handleGoogleLogin() {
     const { auth } = getFirebase();
     signInWithPopup(auth, providers)
@@ -28,8 +27,47 @@ function AuthProvider({ children }) {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
         const user = result.user;
+        auth.currentUser.getIdTokenResult()
+          .then((idTokenResult) => {
+            // Confirm the user is an Admin.
+            console.log(idTokenResult.claims.roles);
+            if (idTokenResult.claims.roles == undefined) {
+              console.log("Please Sign In again!!");
+              console.log("unauthorized");
+              navigate("/login");
+              return 0
 
-        setUser(user);
+            } else
+              if ([
+                "stall_admin1",
+                "stall_admin2",
+                "stall_admin3",
+                "stall_admin4",
+                "stall_admin5",
+                "stall_admin6",
+                "stall_admin7",
+                "stall_admin8",
+                "stall_admin9",
+                "stall_admin10",
+                "stall_admin11",
+                "stall_admin12",
+                // "super_admin",
+                // "cashier"
+              ].includes(idTokenResult.claims.roles[0])) {
+                // Show admin UI.
+                user.role = idTokenResult.claims.roles[0]
+                setUser(user);
+
+              } else {
+
+                console.log("Please Sign In again!!");
+                console.log("unauthorized");
+                navigate("/login");
+
+              }
+          })
+
+
       })
       .then(() => {
         navigate("/");

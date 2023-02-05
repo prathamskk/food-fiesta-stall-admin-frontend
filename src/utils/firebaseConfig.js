@@ -33,6 +33,8 @@ import {
   RecaptchaVerifier,
 } from "firebase/auth";
 
+import { useAuth } from "../context/AuthContext";
+
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
 
@@ -86,12 +88,23 @@ export function newOrder(data) {
 
 export function streamOrders() {
   const ORDERS_COLLECTION_ID = "orders";
-  const { firestore } = getFirebase();
+  const { firestore, auth } = getFirebase();
+
+
   const orderCol = collection(firestore, ORDERS_COLLECTION_ID);
   const stream = (callback) => {
+
+    const role = null
+    auth.currentUser.getIdTokenResult()
+      .then((idTokenResult) => {
+        console.log("hi");
+        role = idTokenResult.claims.roles[0]
+      })
+
+
     const q = query(
       orderCol,
-      where("payment_status", "==", "unpaid"),
+      where("stall_order.stall" + role[role.length - 1] + ".status", "==", "inprogress"),
       orderBy("order_placed_timestamp", "asc"),
       limit(15)
     );
@@ -106,6 +119,9 @@ export function streamOrders() {
 
       callback(orders);
     });
+
+
+
   };
 
   const streamSearch = (orderId, callback) => {

@@ -20,7 +20,7 @@ import { useMenu } from "../context/MenuContext";
 import { getFirebase } from "../utils/firebaseConfig";
 import { doc, updateDoc } from "firebase/firestore";
 import DoDisturbIcon from '@mui/icons-material/DoDisturb';
-const OrderCard = (props) => {
+const StallOrderCard = (props) => {
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => {
     setOpen(true);
@@ -84,9 +84,6 @@ const OrderCard = (props) => {
                 alignItems="flex-start"
               >
                 <Button color="inherit">#{order.order_id}</Button>
-                <Button color="inherit" startIcon={order.payment_status === "unpaid" ? <MoneyOffIcon /> : order.payment_status === "paid" ? <CurrencyRupeeIcon /> : <DoDisturbIcon />}>
-                  {order.payment_status}
-                </Button>
               </Stack>
             </Container>
 
@@ -105,7 +102,7 @@ const OrderCard = (props) => {
           variant="contained"
           color="secondary"
         >
-          Confirm Payment
+          Ready Up
         </Button>
         <Dialog
           open={open}
@@ -143,4 +140,4 @@ const OrderCard = (props) => {
   );
 };
 
-export default OrderCard;
+export default StallOrderCard;

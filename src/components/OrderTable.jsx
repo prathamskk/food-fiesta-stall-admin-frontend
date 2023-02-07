@@ -13,22 +13,14 @@ import Paper from "@mui/material/Paper";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useEffect, useState } from "react";
+import { useAuth } from "../context/AuthContext";
 
 function Row(props) {
   const { row, stallNo, subtotal } = props;
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   return (
     <>
       <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
-        <TableCell>
-          <IconButton
-            aria-label="expand row"
-            size="small"
-            onClick={() => setOpen(!open)}
-          >
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
-        </TableCell>
         <TableCell component="th" scope="row">
           {stallNo}
         </TableCell>
@@ -98,40 +90,28 @@ function createTotalObj(rows) {
 }
 
 export default function CollapsibleTable(props) {
+
+  const { user } = useAuth()
   const { rows } = props;
+  const rowObject = rows.stall_order["stall" + user.role[user.role.length - 1]]
+  const row = "stall" + user.role[user.role.length - 1]
   return (
     <TableContainer component={Paper}>
       <Table aria-label="collapsible table">
         <TableHead>
           <TableRow>
-            <TableCell />
             <TableCell>Stall</TableCell>
             <TableCell align="right">Status</TableCell>
             <TableCell align="right">Subtotal</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {Object.keys(rows.stall_order).map((row, index) => {
-            const rowObject = rows.stall_order[row];
-            return (
-              <Row
-                key={row}
-                stallNo={row}
-                row={rowObject}
-                subtotal={createTotalObj(rows)}
-              />
-            );
-          })}
-          <TableRow>
-            <TableCell />
-            <TableCell />
-            <TableCell align="right">
-              <Typography variant="h6">Total:</Typography>
-            </TableCell>
-            <TableCell align="right">
-              <Typography variant="h6">{createTotalObj(rows).Total}</Typography>
-            </TableCell>
-          </TableRow>
+          <Row
+            key={row}
+            stallNo={row}
+            row={rowObject}
+            subtotal={createTotalObj(rows)}
+          />
         </TableBody>
       </Table>
     </TableContainer>

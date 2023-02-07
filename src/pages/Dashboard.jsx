@@ -26,7 +26,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CollapsibleTable from "../components/OrderTable";
-import OrderCard from "../components/OrderCard";
+import StallOrderCard from "../components/OrderCard";
 import { useAuth } from "../context/AuthContext";
 
 function TabPanel(props) {
@@ -163,7 +163,7 @@ const Dashboard = () => {
           {searchOrders.map((order, index) => {
             return (
               <Grid item xs={12} sm={12} md={6} lg={4} key={index}>
-                <OrderCard order={order} />
+                <StallOrderCard order={order} />
               </Grid>
             );
           })}
@@ -177,7 +177,7 @@ const Dashboard = () => {
             {orders.map((order, index) => {
               return (
                 <Grid item xs={12} sm={12} md={6} lg={4} key={index}>
-                  <OrderCard order={order} />
+                  <StallOrderCard order={order} />
                 </Grid>
               );
             })}
@@ -192,7 +192,7 @@ const Dashboard = () => {
             {paidorders.map((order, index) => {
               return (
                 <Grid item xs={12} sm={12} md={6} lg={4} key={index}>
-                  <OrderCard order={order} />
+                  <StallOrderCard order={order} />
                 </Grid>
               );
             })}
@@ -207,7 +207,7 @@ const Dashboard = () => {
             {cancelorders.map((order, index) => {
               return (
                 <Grid item xs={12} sm={12} md={6} lg={4} key={index}>
-                  <OrderCard order={order} />
+                  <StallOrderCard order={order} />
                 </Grid>
               );
             })}
@@ -222,7 +222,7 @@ const Dashboard = () => {
             {cancelorders.map((order, index) => {
               return (
                 <Grid item xs={12} sm={12} md={6} lg={4} key={index}>
-                  <OrderCard order={order} />
+                  <StallOrderCard order={order} />
                 </Grid>
               );
             })}

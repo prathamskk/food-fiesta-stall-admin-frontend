@@ -94,7 +94,7 @@ export function streamOrders() {
   const orderCol = collection(firestore, ORDERS_COLLECTION_ID);
   const stream = (callback) => {
 
-    const role = null
+    var role = null
     auth.currentUser.getIdTokenResult()
       .then((idTokenResult) => {
         console.log("hi");

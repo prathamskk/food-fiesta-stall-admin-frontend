@@ -146,7 +146,7 @@ const StallOrderCard = (props) => {
             <Button
               onClick={handleClickOpen}
               variant="contained"
-              disabled={rowObject.status === "served" || rowObject.status === "cancelled"}
+              disabled={rowObject.status === "served" || rowObject.status === "cancelled" || rowObject.status === "refunded"}
               color="secondary"
             >
               {rowObject.status === "inprogress" ? "ready" : "served"}

@@ -200,7 +200,6 @@ const Dashboard = () => {
 
       setcancelledOrders(ordersreceived);
     });
-//TODO: UPDATES SECURITY RULES
 
 
     return () => unsub();
@@ -231,7 +230,6 @@ const Dashboard = () => {
 
       setrefundedOrders(ordersreceived);
     });
-//TODO: UPDATES SECURITY RULES
 
 
     return () => unsub();

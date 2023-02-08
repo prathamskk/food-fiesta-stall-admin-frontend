@@ -35,7 +35,7 @@ const StallOrderCard = (props) => {
     setOpen(false);
   };
   const handleCloseCancel = () => {
-    setOpen(false);
+    setOpenCancel(false);
   };
   const handleSubmit = async (order) => {
     const { firestore } = getFirebase();
@@ -70,6 +70,7 @@ const StallOrderCard = (props) => {
     const docRef = doc(firestore, "orders", order.id);
     const updatedOrder = order;
     delete updatedOrder.id;
+    updatedOrder.payment_status = "cancelled"
     const stall_id = "stall" + user.role[user.role.length - 1]
     updatedOrder.stall_order[stall_id].status = "cancelled"
 
@@ -109,11 +110,6 @@ const StallOrderCard = (props) => {
   const rows = order;
   const rowObject = rows.stall_order["stall" + user.role[user.role.length - 1]]
   const stallId = "stall" + user.role[user.role.length - 1]
-  const statusObj = {
-    inprogress: "ready",
-    ready: "served",
-
-  }
   return (
     <Card sx={{ minWidth: 275 }} variant="outlined">
       <CardHeader
@@ -150,7 +146,7 @@ const StallOrderCard = (props) => {
             <Button
               onClick={handleClickOpen}
               variant="contained"
-              disabled={rowObject.status === "served"}
+              disabled={rowObject.status === "served" || rowObject.status === "cancelled"}
               color="secondary"
             >
               {rowObject.status === "inprogress" ? "ready" : "served"}
@@ -208,7 +204,7 @@ const StallOrderCard = (props) => {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">{rowObject.status === "inprogress" ? "Is the Order Ready?" : rowObject.status === "ready" ? "Served to Customer" : ""}</DialogTitle>
+          <DialogTitle id="alert-dialog-title">Are You Sure You Wish To Cancel Order?</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
               {!checkAvail(order) ? (

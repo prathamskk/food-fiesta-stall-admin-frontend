@@ -54,12 +54,6 @@ function a11yProps(index) {
 
 const Dashboard = () => {
   const [searchValue, setSearchValue] = useState();
-  const { menuList } = useMenu();
-  const [orders, setOrders] = useState([]);
-  const [paidorders, setPaidOrders] = useState([]);
-  const [cancelorders, setCancelOrders] = useState([]);
-  const [searchOrders, setSearchOrders] = useState([]);
-
   useEffect(() => {
     if (searchValue?.length !== 6) {
       return;
@@ -72,6 +66,19 @@ const Dashboard = () => {
 
     return () => unsub();
   }, [searchValue]);
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+  const handleChangeIndex = (index) => {
+    setValue(index);
+  };
+  const { menuList } = useMenu();
+  const [orders, setOrders] = useState([]);
+  const [readyorders, setreadyOrders] = useState([]);
+  const [servedorders, setservedOrders] = useState([]);
+  const [cancelledorders, setcancelledOrders] = useState([]);
+  const [refundedorders, setrefundedOrders] = useState([]);
+  const [searchOrders, setSearchOrders] = useState([]);
 
   const { user } = useAuth()
   useEffect(() => {
@@ -96,29 +103,136 @@ const Dashboard = () => {
           ...doc.data(),
         };
       });
+      console.log(ordersreceived);
 
       setOrders(ordersreceived);
     });
-
+//TODO: UPDATES SECURITY RULES
 
 
     return () => unsub();
   }, []);
-
   useEffect(() => {
-    const { streamPaid } = streamOrders();
-    const unsub = streamPaid((orders) => {
-      setPaidOrders(orders);
+
+    const ORDERS_COLLECTION_ID = "orders";
+    const { firestore, auth } = getFirebase();
+
+    const orderCol = collection(firestore, ORDERS_COLLECTION_ID);
+    console.log(user)
+
+    const q = query(
+      orderCol,
+      where("stall_order.stall" + user.role[user.role.length - 1] + ".status", "==", "ready"),
+      orderBy("order_placed_timestamp", "asc"),
+      limit(15)
+    );
+
+    const unsub = onSnapshot(q, (snapshot) => {
+      const ordersreceived = snapshot.docs.map((doc) => {
+        return {
+          id: doc.id,
+          ...doc.data(),
+        };
+      });
+      console.log(ordersreceived);
+
+      setreadyOrders(ordersreceived);
     });
+//TODO: UPDATES SECURITY RULES
+
 
     return () => unsub();
   }, []);
-
   useEffect(() => {
-    const { streamCancelled } = streamOrders();
-    const unsub = streamCancelled((orders) => {
-      setCancelOrders(orders);
+
+    const ORDERS_COLLECTION_ID = "orders";
+    const { firestore, auth } = getFirebase();
+
+    const orderCol = collection(firestore, ORDERS_COLLECTION_ID);
+    console.log(user)
+
+    const q = query(
+      orderCol,
+      where("stall_order.stall" + user.role[user.role.length - 1] + ".status", "==", "served"),
+      orderBy("order_placed_timestamp", "asc"),
+      limit(15)
+    );
+
+    const unsub = onSnapshot(q, (snapshot) => {
+      const ordersreceived = snapshot.docs.map((doc) => {
+        return {
+          id: doc.id,
+          ...doc.data(),
+        };
+      });
+      console.log(ordersreceived);
+
+      setservedOrders(ordersreceived);
     });
+//TODO: UPDATES SECURITY RULES
+
+
+    return () => unsub();
+  }, []);
+  useEffect(() => {
+
+    const ORDERS_COLLECTION_ID = "orders";
+    const { firestore, auth } = getFirebase();
+
+    const orderCol = collection(firestore, ORDERS_COLLECTION_ID);
+    console.log(user)
+
+    const q = query(
+      orderCol,
+      where("stall_order.stall" + user.role[user.role.length - 1] + ".status", "==", "cancelled"),
+      orderBy("order_placed_timestamp", "asc"),
+      limit(15)
+    );
+
+    const unsub = onSnapshot(q, (snapshot) => {
+      const ordersreceived = snapshot.docs.map((doc) => {
+        return {
+          id: doc.id,
+          ...doc.data(),
+        };
+      });
+      console.log(ordersreceived);
+
+      setcancelledOrders(ordersreceived);
+    });
+//TODO: UPDATES SECURITY RULES
+
+
+    return () => unsub();
+  }, []);
+  useEffect(() => {
+
+    const ORDERS_COLLECTION_ID = "orders";
+    const { firestore, auth } = getFirebase();
+
+    const orderCol = collection(firestore, ORDERS_COLLECTION_ID);
+    console.log(user)
+
+    const q = query(
+      orderCol,
+      where("stall_order.stall" + user.role[user.role.length - 1] + ".status", "==", "refunded"),
+      orderBy("order_placed_timestamp", "asc"),
+      limit(15)
+    );
+
+    const unsub = onSnapshot(q, (snapshot) => {
+      const ordersreceived = snapshot.docs.map((doc) => {
+        return {
+          id: doc.id,
+          ...doc.data(),
+        };
+      });
+      console.log(ordersreceived);
+
+      setrefundedOrders(ordersreceived);
+    });
+//TODO: UPDATES SECURITY RULES
+
 
     return () => unsub();
   }, []);
@@ -126,13 +240,7 @@ const Dashboard = () => {
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
 
-  const handleChangeIndex = (index) => {
-    setValue(index);
-  };
   return (
     <Box>
       <SearchBar
@@ -145,7 +253,9 @@ const Dashboard = () => {
         onChange={handleChange}
         indicatorColor="secondary"
         textColor="inherit"
-        variant="fullWidth"
+        // variant="fullWidth"
+        variant="scrollable"
+        scrollButtons="auto"
         aria-label="full width tabs example"
       >
         <Tab label="Search" {...a11yProps(0)} />
@@ -153,6 +263,7 @@ const Dashboard = () => {
         <Tab label="Ready" {...a11yProps(2)} />
         <Tab label="Served" {...a11yProps(3)} />
         <Tab label="Cancelled" {...a11yProps(4)} />
+        <Tab label="Refunded" {...a11yProps(5)} />
       </Tabs>
       <SwipeableViews
         axis={theme.direction === "rtl" ? "x-reverse" : "x"}
@@ -189,7 +300,7 @@ const Dashboard = () => {
             spacing={{ xs: 2 }}
             columns={{ xs: 12, sm: 12, md: 12, lg: 12 }}
           >
-            {paidorders.map((order, index) => {
+              {readyorders.map((order, index) => {
               return (
                 <Grid item xs={12} sm={12} md={6} lg={4} key={index}>
                   <StallOrderCard order={order} />
@@ -204,7 +315,7 @@ const Dashboard = () => {
             spacing={{ xs: 2 }}
             columns={{ xs: 12, sm: 12, md: 12, lg: 12 }}
           >
-            {cancelorders.map((order, index) => {
+               {servedorders.map((order, index) => {
               return (
                 <Grid item xs={12} sm={12} md={6} lg={4} key={index}>
                   <StallOrderCard order={order} />
@@ -219,7 +330,22 @@ const Dashboard = () => {
             spacing={{ xs: 2 }}
             columns={{ xs: 12, sm: 12, md: 12, lg: 12 }}
           >
-            {cancelorders.map((order, index) => {
+               {cancelledorders.map((order, index) => {
+              return (
+                <Grid item xs={12} sm={12} md={6} lg={4} key={index}>
+                  <StallOrderCard order={order} />
+                </Grid>
+              );
+            })}
+          </Grid>
+        </TabPanel>
+        <TabPanel value={value} index={5} dir={theme.direction}>
+          <Grid
+            container
+            spacing={{ xs: 2 }}
+            columns={{ xs: 12, sm: 12, md: 12, lg: 12 }}
+          >
+               {refundedorders.map((order, index) => {
               return (
                 <Grid item xs={12} sm={12} md={6} lg={4} key={index}>
                   <StallOrderCard order={order} />

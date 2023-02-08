@@ -20,13 +20,6 @@ function Row(props) {
   const [open, setOpen] = useState(true);
   return (
     <>
-      <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
-        <TableCell component="th" scope="row">
-          {stallNo}
-        </TableCell>
-        <TableCell align="right">{row.status}</TableCell>
-        <TableCell align="right">{subtotal.subTotalObj[stallNo]}</TableCell>
-      </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
@@ -98,13 +91,6 @@ export default function CollapsibleTable(props) {
   return (
     <TableContainer component={Paper}>
       <Table aria-label="collapsible table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Stall</TableCell>
-            <TableCell align="right">Status</TableCell>
-            <TableCell align="right">Subtotal</TableCell>
-          </TableRow>
-        </TableHead>
         <TableBody>
           <Row
             key={row}

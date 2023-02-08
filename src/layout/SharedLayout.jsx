@@ -16,8 +16,10 @@ import {
   CardHeader,
   Card,
   CardContent,
+  Modal,
 } from "@mui/material";
 import EMobiledataIcon from "@mui/icons-material/EMobiledata";
+import MenuToggle from "../components/MenuToggle";
 import { useAuth } from "../context/AuthContext";
 
 import { Stack } from "@mui/system";
@@ -25,6 +27,9 @@ const SharedLayout = () => {
   const { user, handleSignOut } = useAuth();
   const [details, setDetails] = useState(false);
   const [anchor, setAnchor] = useState(null);
+  const [openModal, setOpenModal] = React.useState(false);
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
   const open = Boolean(anchor);
   const handleClick = (event) => {
     setAnchor(event.currentTarget);
@@ -50,10 +55,24 @@ const SharedLayout = () => {
           </Typography>
 
           <Stack direction="row" spacing={2}>
+            <Button id="profile-button-bruh" variant="contained" color="secondary" onClick={handleOpenModal}>
+              Menu
+            </Button>
             <Button id="profile-button" onClick={handleClick}>
               <Avatar src={user?.photoURL}>{user?.displayName[0]}</Avatar>
             </Button>
           </Stack>
+          <Modal
+            open={openModal}
+            onClose={handleCloseModal}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box>
+
+              <MenuToggle />
+            </Box>
+          </Modal>
           <Popover
             anchorEl={anchor}
             open={open}

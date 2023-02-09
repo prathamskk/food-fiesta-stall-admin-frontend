@@ -80,19 +80,6 @@ const StallOrderCard = (props) => {
   }
   const { order } = props;
 
-  function checkAvail(order) {
-    const orderObj = order;
-    const { menuList } = useMenu();
-
-    for (let stall_order in orderObj.stall_order) {
-      for (let itemId in orderObj.stall_order[stall_order].items_ordered) {
-        if (menuList[stall_order][itemId].availability == false) {
-          return false;
-        }
-      }
-    }
-    return true;
-  }
 
   const paidstyleobject = {
     bgcolor: "#d4edda",
@@ -106,6 +93,34 @@ const StallOrderCard = (props) => {
     textOverflow: "ellipsis",
   }
 
+  const styleObj = {
+    'inprogress': {
+      bgcolor: "#fff3cd",
+      color: "#856404",
+      textOverflow: "ellipsis",
+    },
+    'ready': {
+      bgcolor: "#d4edda",
+      color: "#155724",
+      textOverflow: "ellipsis",
+    },
+    'served': {
+      bgcolor: "#cce5ff",
+      color: "#004085",
+      textOverflow: "ellipsis",
+    },
+    'cancelled': {
+      bgcolor: "#f8d7da",
+      color: "#721c24",
+      textOverflow: "ellipsis",
+    },
+    'refunded': {
+      bgcolor: "#e2e3e5",
+      color: "#383d41",
+      textOverflow: "ellipsis",
+    }
+  }
+
   const { user } = useAuth()
   const rows = order;
   const rowObject = rows.stall_order["stall" + user.role[user.role.length - 1]]
@@ -113,7 +128,7 @@ const StallOrderCard = (props) => {
   return (
     <Card sx={{ minWidth: 275 }} variant="outlined">
       <CardHeader
-        sx={order.payment_status === "unpaid" || order.payment_status === "cancelled" ? unpaidstyleobject : paidstyleobject}
+        sx={styleObj[rowObject.status]}
         title={
           <Stack justifyContent="flex-start" alignItems="flex-start">
             <Container maxWidth={false} disableGutters>
@@ -168,31 +183,20 @@ const StallOrderCard = (props) => {
           aria-describedby="alert-dialog-description"
         >
           <DialogTitle id="alert-dialog-title">{rowObject.status === "inprogress" ? "Is the Order Ready?" : rowObject.status === "ready" ? "Served to Customer?" : ""}</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              {!checkAvail(order) ? (
-                <Typography color="error">
-                  Some Items in the Order Have Gone Out of Stock
-                </Typography>
-              ) : (
-                ""
-              )}
-            </DialogContentText>
-          </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Disagree</Button>
             <Button
-              onClick={() => {
+              onClick={async () => {
                 if (rowObject.status === "inprogress") {
 
-                  handleSubmit(order);
+                  await handleSubmit(order);
                 } else if (rowObject.status === "ready") {
 
-                  handleSubmitServed(order);
+                  await handleSubmitServed(order);
                 }
+                handleClose()
               }}
               autoFocus
-              disabled={!checkAvail(order)}
             >
               Agree
             </Button>
@@ -205,25 +209,14 @@ const StallOrderCard = (props) => {
           aria-describedby="alert-dialog-description"
         >
           <DialogTitle id="alert-dialog-title">Are You Sure You Wish To Cancel Order?</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              {!checkAvail(order) ? (
-                <Typography color="error">
-                  Some Items in the Order Have Gone Out of Stock
-                </Typography>
-              ) : (
-                ""
-              )}
-            </DialogContentText>
-          </DialogContent>
           <DialogActions>
             <Button onClick={handleCloseCancel}>Disagree</Button>
             <Button
               onClick={() => {
                 handleCancel(order);
+                setOpenCancel(false)
               }}
               autoFocus
-              disabled={!checkAvail(order)}
             >
               Agree
             </Button>

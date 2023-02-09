@@ -91,8 +91,7 @@ const Dashboard = () => {
     const q = query(
       orderCol,
       where("stall_order.stall" + user.role[user.role.length - 1] + ".status", "==", "inprogress"),
-      orderBy("order_placed_timestamp", "asc"),
-      limit(15)
+      orderBy("order_placed_timestamp", "asc")
     );
 
     const unsub = onSnapshot(q, (snapshot) => {
@@ -102,11 +101,8 @@ const Dashboard = () => {
           ...doc.data(),
         };
       });
-      console.log(ordersreceived);
-
       setOrders(ordersreceived);
     });
-//TODO: UPDATES SECURITY RULES
 
 
     return () => unsub();
@@ -133,8 +129,6 @@ const Dashboard = () => {
           ...doc.data(),
         };
       });
-      console.log(ordersreceived);
-
       setreadyOrders(ordersreceived);
     });
 //TODO: UPDATES SECURITY RULES

@@ -94,6 +94,11 @@ const StallOrderCard = (props) => {
   }
 
   const styleObj = {
+    'unpaid': {
+      bgcolor: "#f8d7da",
+      color: "#721c24",
+      textOverflow: "ellipsis",
+    },
     'inprogress': {
       bgcolor: "#fff3cd",
       color: "#856404",
@@ -162,13 +167,13 @@ const StallOrderCard = (props) => {
             <Button
               onClick={handleClickOpen}
               variant="contained"
-              disabled={rowObject.status === "served" || rowObject.status === "cancelled" || rowObject.status === "refunded"}
+              disabled={rowObject.status === "unpaid" || rowObject.status === "served" || rowObject.status === "cancelled" || rowObject.status === "refunded"}
               color="secondary"
             >
-              {rowObject.status === "inprogress" ? "ready" : "served"}
+              {rowObject.status === "inprogress" ? "ready" : rowObject.status === "ready" ? "served" : ""}
             </Button>
             <Button
-              disabled={rowObject.status === "served" || rowObject.status === "cancelled" || rowObject.status === "refunded"}
+              disabled={rowObject.status === "unpaid" || rowObject.status === "served" || rowObject.status === "cancelled" || rowObject.status === "refunded"}
               onClick={handleClickOpenCancel}
               variant="contained"
               color="secondary"

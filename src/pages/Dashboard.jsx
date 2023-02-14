@@ -22,7 +22,7 @@ import {
 } from "@mui/material";
 import SearchBar from "../components/SearchBar";
 import { streamOrders, getFirebase } from "../utils/firebaseConfig";
-import { query, orderBy, startAt, onSnapshot, collection, where, limit } from "firebase/firestore";
+import { query, orderBy, startAt, onSnapshot, collection, where, limit, getDocs } from "firebase/firestore";
 import MenuToggle from "../components/MenuToggle";
 import MoneyOffIcon from "@mui/icons-material/MoneyOff";
 import { useMenu } from "../context/MenuContext";
@@ -104,12 +104,30 @@ const Dashboard = () => {
   const { user } = useAuth()
   useEffect(() => {
 
+
+
     const ORDERS_COLLECTION_ID = "orders";
     const { firestore, auth } = getFirebase();
 
     const orderCol = collection(firestore, ORDERS_COLLECTION_ID);
     console.log(user)
 
+    // const qtest = query(
+    //   orderCol,
+    //   orderBy("stall_order.stall" + user.role[user.role.length - 1] + ".status"),
+    // );
+
+    // getDocs(qtest).then(
+    //   querySnapshot => {
+    //     const orderss = querySnapshot.docs.map((doc) => {
+    //       return {
+    //         id: doc.id,
+    //         ...doc.data(),
+    //       };
+    //     });
+    //     console.log(orderss);
+    //   }
+    // );
     const q = query(
       orderCol,
       where("stall_order.stall" + user.role[user.role.length - 1] + ".status", "==", "inprogress"),

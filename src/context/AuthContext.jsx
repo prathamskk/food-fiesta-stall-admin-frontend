@@ -38,22 +38,18 @@ function AuthProvider({ children }) {
               navigate("/login");
               return 0
             } else
-              if ([
-                "stall_admin1",
-                "stall_admin2",
-                "stall_admin3",
-                "stall_admin4",
-                "stall_admin5",
-                "stall_admin6",
-                "stall_admin7",
-                "stall_admin8",
-                "stall_admin9",
-                "stall_admin10",
-                "stall_admin11",
-                "stall_admin12",
-                // "super_admin",
-                // "cashier"
-              ].includes(idTokenResult.claims.roles[0])) {
+              if (["stall-01",
+                "stall-02",
+                "stall-03",
+                "stall-04",
+                "stall-05",
+                "stall-06",
+                "stall-07",
+                "stall-08",
+                "stall-09",
+                "stall-10",
+                "stall-11",
+                "stall-12"].includes(idTokenResult.claims.roles[0])) {
                 // Show admin UI.
                 user.role = idTokenResult.claims.roles[0]
                 setUser(user);
@@ -112,22 +108,18 @@ function AuthProvider({ children }) {
               navigate("/login");
               return 0
             } else
-              if ([
-                "stall_admin1",
-                "stall_admin2",
-                "stall_admin3",
-                "stall_admin4",
-                "stall_admin5",
-                "stall_admin6",
-                "stall_admin7",
-                "stall_admin8",
-                "stall_admin9",
-                "stall_admin10",
-                "stall_admin11",
-                "stall_admin12",
-                // "super_admin",
-                // "cashier"
-              ].includes(idTokenResult.claims.roles[0])) {
+              if (["stall-01",
+                "stall-02",
+                "stall-03",
+                "stall-04",
+                "stall-05",
+                "stall-06",
+                "stall-07",
+                "stall-08",
+                "stall-09",
+                "stall-10",
+                "stall-11",
+                "stall-12"].includes(idTokenResult.claims.roles[0])) {
                 // Show admin UI.
                 user.role = idTokenResult.claims.roles[0]
                 setUser(user);

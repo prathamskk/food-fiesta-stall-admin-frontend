@@ -21,7 +21,7 @@ const style = {
 const MenuToggle = () => {
     const { menuList } = useMenu()
     const { user } = useAuth()
-    const stallID = "stall" + user.role[user.role.length - 1]
+    const stallID = user.role
 
     const handleChange = async (event) => {
         const { firestore } = getFirebase();
@@ -46,7 +46,7 @@ const MenuToggle = () => {
                 {Object.keys(menuList[stallID]).map((itemID, keys) => {
                     return (
 
-                        <FormControlLabel key={keys} control={<Switch checked={menuList[stallID][itemID].availability} value={itemID} onChange={handleChange}  />} label={menuList[stallID][itemID].name} />
+                        <FormControlLabel key={keys} control={<Switch checked={menuList[stallID][itemID].availability} value={itemID} onChange={handleChange} />} label={menuList[stallID][itemID].name} />
                     )
                 })}
             </FormGroup>

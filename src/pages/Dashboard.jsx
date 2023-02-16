@@ -114,7 +114,7 @@ const Dashboard = () => {
 
     // const qtest = query(
     //   orderCol,
-    //   orderBy("stall_order.stall" + user.role[user.role.length - 1] + ".status"),
+    //   orderBy("stall_order." + user.role + ".status"),
     // );
 
     // getDocs(qtest).then(
@@ -130,7 +130,7 @@ const Dashboard = () => {
     // );
     const q = query(
       orderCol,
-      where("stall_order.stall" + user.role[user.role.length - 1] + ".status", "==", "inprogress"),
+      where("stall_order." + user.role+ ".status", "==", "inprogress"),
       orderBy("order_placed_timestamp", "asc")
     );
 
@@ -157,7 +157,7 @@ const Dashboard = () => {
 
     const q = query(
       orderCol,
-      where("stall_order.stall" + user.role[user.role.length - 1] + ".status", "==", "ready"),
+      where("stall_order." + user.role + ".status", "==", "ready"),
       orderBy("order_placed_timestamp", "asc"),
       limit(15)
     );
@@ -186,7 +186,7 @@ const Dashboard = () => {
 
     const q = query(
       orderCol,
-      where("stall_order.stall" + user.role[user.role.length - 1] + ".status", "==", "served"),
+      where("stall_order." + user.role + ".status", "==", "served"),
       orderBy("order_placed_timestamp", "asc"),
       limit(15)
     );
@@ -217,7 +217,7 @@ const Dashboard = () => {
 
     const q = query(
       orderCol,
-      where("stall_order.stall" + user.role[user.role.length - 1] + ".status", "==", "cancelled"),
+      where("stall_order." + user.role + ".status", "==", "cancelled"),
       orderBy("order_placed_timestamp", "asc"),
       limit(15)
     );
@@ -247,7 +247,7 @@ const Dashboard = () => {
 
     const q = query(
       orderCol,
-      where("stall_order.stall" + user.role[user.role.length - 1] + ".status", "==", "refunded"),
+      where("stall_order." + user.role + ".status", "==", "refunded"),
       orderBy("order_placed_timestamp", "asc"),
       limit(15)
     );

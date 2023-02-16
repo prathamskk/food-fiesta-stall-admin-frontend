@@ -86,8 +86,8 @@ export default function CollapsibleTable(props) {
 
   const { user } = useAuth()
   const { rows } = props;
-  const rowObject = rows.stall_order["stall" + user.role[user.role.length - 1]]
-  const row = "stall" + user.role[user.role.length - 1]
+  const rowObject = rows.stall_order[user.role]
+  const row = user.role
   return (
     <TableContainer component={Paper}>
       <Table aria-label="collapsible table">

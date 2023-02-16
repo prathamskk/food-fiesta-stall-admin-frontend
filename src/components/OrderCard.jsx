@@ -42,7 +42,7 @@ const StallOrderCard = (props) => {
     const docRef = doc(firestore, "orders", order.id);
     const updatedOrder = order;
     delete updatedOrder.id;
-    const stall_id = "stall" + user.role[user.role.length - 1]
+    const stall_id = user.role
     if (order.stall_order[stall_id].status == "inprogress") {
 
       updatedOrder.stall_order[stall_id].status = "ready"
@@ -56,7 +56,7 @@ const StallOrderCard = (props) => {
     const docRef = doc(firestore, "orders", order.id);
     const updatedOrder = order;
     delete updatedOrder.id;
-    const stall_id = "stall" + user.role[user.role.length - 1]
+    const stall_id = user.role
 
     if (order.stall_order[stall_id].status == "ready") {
       updatedOrder.stall_order[stall_id].status = "served"
@@ -71,7 +71,7 @@ const StallOrderCard = (props) => {
     const updatedOrder = order;
     delete updatedOrder.id;
     updatedOrder.payment_status = "cancelled"
-    const stall_id = "stall" + user.role[user.role.length - 1]
+    const stall_id =  user.role
     updatedOrder.stall_order[stall_id].status = "cancelled"
 
     console.log("updating to ", updatedOrder.stall_order[stall_id].status);
@@ -128,8 +128,8 @@ const StallOrderCard = (props) => {
 
   const { user } = useAuth()
   const rows = order;
-  const rowObject = rows.stall_order["stall" + user.role[user.role.length - 1]]
-  const stallId = "stall" + user.role[user.role.length - 1]
+  const rowObject = rows.stall_order[user.role]
+  const stallId = user.role
   return (
     <Card sx={{ minWidth: 275 }} variant="outlined">
       <CardHeader

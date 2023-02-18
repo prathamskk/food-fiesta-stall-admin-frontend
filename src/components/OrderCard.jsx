@@ -23,11 +23,15 @@ import DoDisturbIcon from '@mui/icons-material/DoDisturb';
 import { useAuth } from "../context/AuthContext";
 const StallOrderCard = (props) => {
   const [open, setOpen] = useState(false);
+  const [disable, setDisable] = useState(false);
+  const [disablecancel, setDisablecancel] = useState(false);
   const [openCancel, setOpenCancel] = useState(false);
   const handleClickOpen = () => {
+    setDisable(false)
     setOpen(true);
   };
   const handleClickOpenCancel = () => {
+    setDisablecancel(false)
     setOpenCancel(true);
   };
 
@@ -71,7 +75,7 @@ const StallOrderCard = (props) => {
     const updatedOrder = order;
     delete updatedOrder.id;
     updatedOrder.payment_status = "cancelled"
-    const stall_id =  user.role
+    const stall_id = user.role
     updatedOrder.stall_order[stall_id].status = "cancelled"
 
     console.log("updating to ", updatedOrder.stall_order[stall_id].status);
@@ -192,15 +196,19 @@ const StallOrderCard = (props) => {
           <DialogActions>
             <Button onClick={handleClose}>Disagree</Button>
             <Button
+
+              disabled={disable}
               onClick={async () => {
+                setDisable(true)
                 if (rowObject.status === "inprogress") {
 
                   await handleSubmit(order);
                 } else if (rowObject.status === "ready") {
 
                   await handleSubmitServed(order);
+                } else {
+                  handleClose()
                 }
-                handleClose()
               }}
               autoFocus
             >
@@ -218,7 +226,9 @@ const StallOrderCard = (props) => {
           <DialogActions>
             <Button onClick={handleCloseCancel}>Disagree</Button>
             <Button
+              disabled={disablecancel}
               onClick={() => {
+                setDisablecancel(true)
                 handleCancel(order);
                 setOpenCancel(false)
               }}

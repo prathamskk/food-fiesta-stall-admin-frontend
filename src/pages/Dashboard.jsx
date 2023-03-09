@@ -130,7 +130,7 @@ const Dashboard = () => {
     // );
     const q = query(
       orderCol,
-      where("stall_order." + user.role+ ".status", "==", "inprogress"),
+      where("stall_order." + user.role + ".status", "==", "inprogress"),
       orderBy("order_placed_timestamp", "asc")
     );
 
@@ -305,6 +305,11 @@ const Dashboard = () => {
             onClose={handleCloseModal}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
+            style={{
+              overflow: 'scroll',
+              height: '100%',
+              display: 'block'
+            }}
           >
             <Box>
 

@@ -306,15 +306,12 @@ const Dashboard = () => {
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
             style={{
+              position: 'absolute',
               overflow: 'scroll',
               height: '100%',
-              display: 'block'
-            }}
-          >
-            <Box>
-
+              display: 'block',
+            }}>
               <MenuToggle />
-            </Box>
           </Modal>
           <Popover
             anchorEl={anchor}

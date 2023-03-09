@@ -15,6 +15,8 @@ const style = {
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
+    overflow:"scroll",
+    height:  "220px"
 };
 
 
@@ -45,7 +47,6 @@ const MenuToggle = () => {
             <FormGroup>
                 {Object.keys(menuList[stallID]).map((itemID, keys) => {
                     return (
-
                         <FormControlLabel key={keys} control={<Switch checked={menuList[stallID][itemID].availability} value={itemID} onChange={handleChange} />} label={menuList[stallID][itemID].name} />
                     )
                 })}
